@@ -1,0 +1,21 @@
+$all-colors: map-merge-multiple($grays);
+$types: ('color', 'background-color');
+
+@each $type in $types {
+  $utilities: map-merge(
+    $utilities,
+    (
+      $type: map-merge(
+        map-get($utilities, $type),
+        (
+          values: map-merge(
+            map-get(map-get($utilities, $type), 'values'),
+            (
+              $all-colors
+            ),
+          ),
+        ),
+      ),
+    )
+  );
+}
