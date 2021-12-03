@@ -1,0 +1,5 @@
+.nav-item {
+  &:hover, &.active {
+    background-color: rgba(var(--bs-white-rgb), 0.15);
+  }
+}
