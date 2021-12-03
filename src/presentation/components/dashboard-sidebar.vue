@@ -11,8 +11,10 @@
       <li
         v-for="item in items"
         :key="`sidebar-${item.text}`"
-        class="nav-item"
-        :class="{ active: $route.name === item.routeName }"
+        :class="{
+          'nav-item': item.type === 'link',
+          active: $route.name === item.routeName,
+        }"
       >
         <!-- Link -->
         <router-link
