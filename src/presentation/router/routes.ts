@@ -14,14 +14,19 @@ const routes: Array<RouteRecordRaw> = [
     path: '/auth',
     redirect: { name: 'login' },
     component: () => import('@/presentation/pages/_default.vue'),
+    meta: {
+      layout: AuthLayout,
+    },
     children: [
       {
         path: 'login',
         name: 'login',
         component: () => import('@/presentation/pages/auth/login.vue'),
-        meta: {
-          layout: AuthLayout,
-        },
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('@/presentation/pages/auth/register.vue'),
       },
     ],
   },

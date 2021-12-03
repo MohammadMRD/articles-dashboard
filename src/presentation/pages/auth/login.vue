@@ -11,7 +11,10 @@
     <!-- Footer -->
     <template #footer>
       <span>Don't have a account?</span>
-      <router-link to="" class="text-decoration-none text-dark mx-2">
+      <router-link
+        :to="{ name: 'register' }"
+        class="text-decoration-none text-dark mx-2"
+      >
         <strong>Register Now</strong>
       </router-link>
     </template>
