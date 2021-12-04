@@ -69,7 +69,7 @@ export default defineComponent({
     }
 
     const type = attrs.type as InputTypesAttr
-    const inputTypeClass = computed(() => inputTypeMapClasses[type ?? '_default'])
+    const inputTypeClass = computed(() => inputTypeMapClasses[type] ?? inputTypeMapClasses._default)
 
     return {
       inputTypeClass,
