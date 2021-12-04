@@ -1,6 +1,6 @@
 <template>
   <ad-page>
-    <h1>New Article</h1>
+    <h1>{{ $route.name === 'edit-article' ? 'Edit' : 'New' }} Article</h1>
 
     <div class="d-flex">
       <!-- Create/Edit Article -->
