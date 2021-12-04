@@ -5,9 +5,7 @@
       <router-link class="navbar-brand" to="/"> Arvan Challenge </router-link>
 
       <!-- Welcome -->
-      <span class="text-light flex-fill d-none d-sm-block">
-        Welcome {{ username }}
-      </span>
+      <span class="text-light flex-fill d-none d-sm-block"> Welcome {{ username }} </span>
 
       <!-- Logout -->
       <ad-button outline variant="primary">Logout</ad-button>

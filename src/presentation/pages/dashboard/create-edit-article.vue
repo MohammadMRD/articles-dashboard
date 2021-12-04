@@ -20,23 +20,10 @@
           :rootProps="{ class: 'mt-3' }"
         >
         </ad-input>
-        <ad-input
-          label="Body"
-          is="textarea"
-          rows="8"
-          v-model="article.body"
-          :rootProps="{ class: 'mt-3' }"
-        >
-        </ad-input>
+        <ad-input label="Body" is="textarea" rows="8" v-model="article.body" :rootProps="{ class: 'mt-3' }"> </ad-input>
 
         <!-- Submit -->
-        <ad-button
-          variant="primary"
-          class="mt-4"
-          @click.prevent="createArticle()"
-        >
-          Submit
-        </ad-button>
+        <ad-button variant="primary" class="mt-4" @click.prevent="createArticle()"> Submit </ad-button>
       </form>
 
       <!-- Create Tag -->
@@ -82,9 +69,7 @@ export default defineComponent({
     const selectedTags = reactive<{ [key: string]: boolean }>({})
 
     onMounted(async () => {
-      const res = await fetch('https://api.realworld.io/api/tags').then((res) =>
-        res.json()
-      )
+      const res = await fetch('https://api.realworld.io/api/tags').then((res) => res.json())
       tagsData.value = res.tags
     })
 

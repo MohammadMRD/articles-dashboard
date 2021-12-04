@@ -17,11 +17,7 @@
         }"
       >
         <!-- Link -->
-        <router-link
-          v-if="item.type === 'link'"
-          class="nav-link"
-          :to="{ name: item.routeName }"
-        >
+        <router-link v-if="item.type === 'link'" class="nav-link" :to="{ name: item.routeName }">
           {{ item.text }}
         </router-link>
 

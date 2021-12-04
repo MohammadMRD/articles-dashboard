@@ -1,12 +1,7 @@
 <template>
   <ad-page>
     <h1>All Articles</h1>
-    <ad-table
-      :data="data.articles"
-      :uniqueColumn="tableUniqueColumn"
-      :headers="tableHeaders"
-      :formatData="formatData"
-    >
+    <ad-table :data="data.articles" :uniqueColumn="tableUniqueColumn" :headers="tableHeaders" :formatData="formatData">
       <!-- TODO: Add table actions and Pagination -->
     </ad-table>
   </ad-page>

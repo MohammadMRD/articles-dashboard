@@ -1,8 +1,4 @@
-import {
-  IArticleRepository,
-  PageNumber,
-  IArticleQuery,
-} from '@/core/use-cases/interfaces'
+import { IArticleRepository, PageNumber, IArticleQuery } from '@/core/use-cases/interfaces'
 import { Article } from '@/core/entities'
 import { CreateArticleDTO, EditArticleDTO } from '@/core/dto'
 
@@ -33,10 +29,7 @@ export class CreateArticleUseCase {
 export class DeleteArticleUseCase {
   constructor(private articleRepository: IArticleRepository) {}
 
-  execute(
-    query: IArticleQuery,
-    pageNumber?: PageNumber
-  ): Promise<Article[]> | undefined {
+  execute(query: IArticleQuery, pageNumber?: PageNumber): Promise<Article[]> | undefined {
     this.articleRepository.delete(query)
 
     return pageNumber ? this.articleRepository.list(pageNumber) : undefined
@@ -46,7 +39,7 @@ export class DeleteArticleUseCase {
 export class EditArticleUseCase {
   constructor(private articleRepository: IArticleRepository) {}
 
-  execute(articleDto: EditArticleDTO): Promise<Article> {
-    return this.articleRepository.edit(articleDto)
+  execute(query: IArticleQuery, articleDto: EditArticleDTO): Promise<Article> {
+    return this.articleRepository.edit(query, articleDto)
   }
 }
