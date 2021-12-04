@@ -1,5 +1,9 @@
 <template>
-  <div v-bind="rootProps">
+  <div
+    v-bind="rootProps"
+    :class="{ 'form-check': ['radio', 'checkbox'].includes($attrs.type) }"
+  >
+    <!-- Label -->
     <label
       class="form-label"
       :class="{ 'text-danger': isInvalid }"
@@ -8,11 +12,21 @@
     >
       {{ label }}
     </label>
-    <input
-      class="form-control"
-      :class="{ 'is-invalid': isInvalid }"
+
+    <!-- Input -->
+    <component
       v-bind="$attrs"
-    />
+      :is="$attrs.is || 'input'"
+      :class="{
+        'is-invalid': isInvalid,
+        [inputTypeClass]: true,
+      }"
+      :value="modelValue"
+      @input="$emit('update:modelValue', $event.target.value)"
+    >
+    </component>
+
+    <!-- Error -->
     <span v-if="isInvalid" class="invalid-feedback d-block">
       {{ errorMessage }}
     </span>
@@ -20,7 +34,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { computed, defineComponent, useAttrs } from 'vue'
+
+type InputTypesAttr = '_default' | 'checkbox' | 'radio'
 
 export default defineComponent({
   name: 'ad-input',
@@ -46,6 +62,28 @@ export default defineComponent({
       type: String,
       required: false,
     },
+    modelValue: {
+      type: String,
+      required: false,
+    },
+  },
+
+  setup() {
+    const attrs = useAttrs()
+    enum inputTypeMapClasses {
+      _default = 'form-control',
+      checkbox = 'form-check-input',
+      radio = 'form-check-input',
+    }
+
+    const type = attrs.type as InputTypesAttr
+    const inputTypeClass = computed(
+      () => inputTypeMapClasses[type ?? '_default']
+    )
+
+    return {
+      inputTypeClass,
+    }
   },
 })
 

@@ -46,6 +46,18 @@ const routes: Array<RouteRecordRaw> = [
         name: 'articles',
         component: () => import('@/presentation/pages/dashboard/articles.vue'),
       },
+      {
+        path: 'articles/create',
+        name: 'create-article',
+        component: () =>
+          import('@/presentation/pages/dashboard/create-edit-article.vue'),
+      },
+      {
+        path: 'articles/edit/:slug',
+        name: 'edit-article',
+        component: () =>
+          import('@/presentation/pages/dashboard/create-edit-article.vue'),
+      },
     ],
   },
 ]
