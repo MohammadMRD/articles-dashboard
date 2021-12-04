@@ -18,9 +18,11 @@
 @import '~bootstrap/scss/navbar';
 @import '~bootstrap/scss/offcanvas';
 @import '~bootstrap/scss/nav';
+@import '~bootstrap/scss/tables';
 
-@import './utilities/nav';
 @import './utilities/colors';
+@import './utilities/tables';
+@import './utilities/nav';
 
 // 5. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import '~bootstrap/scss/utilities/api';

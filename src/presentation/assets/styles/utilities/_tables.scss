@@ -1,0 +1,11 @@
+.table {
+  thead {
+    th {
+      background-color: var(--bs-gray-200);
+    }
+  }
+
+  tbody {
+    border-top: none !important;
+  }
+}
