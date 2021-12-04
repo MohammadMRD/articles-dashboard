@@ -14,7 +14,7 @@ export class Article {
   slug?: Slug
   title: Title
   description: Description
-  articleBody: ArticleBody
+  body: ArticleBody
   createdAt?: CreatedAt
   updatedAt?: UpdatedAt
   tagList: TagList
@@ -24,7 +24,7 @@ export class Article {
     this.slug = article.slug
     this.title = article.title
     this.description = article.description
-    this.articleBody = article.articleBody
+    this.body = article.body
     this.createdAt = article.createdAt
     this.updatedAt = article.updatedAt
     this.tagList = article.tagList

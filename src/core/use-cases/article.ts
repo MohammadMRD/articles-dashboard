@@ -3,7 +3,8 @@ import {
   PageNumber,
   IArticleQuery,
 } from '@/core/use-cases/interfaces'
-import { Article, Slug } from '../entities'
+import { Article } from '@/core/entities'
+import { CreateArticleDTO } from '@/core/dto'
 
 export class GetAllArticlesUseCase {
   constructor(private articleRepository: IArticleRepository) {}
@@ -18,5 +19,13 @@ export class GetArticleUseCase {
 
   execute(query: IArticleQuery): Promise<Article> {
     return this.articleRepository.get(query)
+  }
+}
+
+export class CreateArticleUseCase {
+  constructor(private articleRepository: IArticleRepository) {}
+
+  execute(articleDto: CreateArticleDTO): Promise<Article> {
+    return this.articleRepository.create(articleDto)
   }
 }
