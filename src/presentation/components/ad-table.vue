@@ -1,30 +1,46 @@
 <template>
-  <table class="table">
-    <!-- Table Headers -->
-    <thead class="table-light">
-      <slot name="headers">
-        <tr>
-          <th v-for="header of headers" :key="`th-${header.key}`">
-            {{ header.text }}
-          </th>
-        </tr>
-      </slot>
-    </thead>
+  <div class="table-responsive">
+    <table class="table">
+      <!-- Table Headers -->
+      <thead>
+        <slot name="headers">
+          <tr>
+            <!-- Row Number -->
+            <th v-if="showRowNumber">#</th>
 
-    <!-- Table Body -->
-    <tbody>
-      <slot>
-        <tr
-          v-for="(item, index) of data"
-          :key="`tr-${item[uniqueColumn] || index}`"
-        >
-          <td v-for="header of headers" :key="`td-${header.key}`">
-            {{ renderData(header.key, item) }}
-          </td>
-        </tr>
-      </slot>
-    </tbody>
-  </table>
+            <!-- Headers -->
+            <th v-for="header of headers" :key="`th-${header.key}`">
+              {{ header.text }}
+            </th>
+
+            <!-- Actions -->
+            <th></th>
+          </tr>
+        </slot>
+      </thead>
+
+      <!-- Table Body -->
+      <tbody>
+        <slot>
+          <!-- Rows -->
+          <tr v-for="(item, index) of data" :key="`tr-${item[uniqueColumn]}`">
+            <!-- Row Number -->
+            <td v-if="showRowNumber">{{ index + 1 }}</td>
+
+            <!-- Items' value -->
+            <td v-for="header of headers" :key="`td-${header.key}`">
+              {{ renderData(header.key, item) }}
+            </td>
+
+            <!-- Actions' slot -->
+            <td>
+              <slot name="actions" :item="item"></slot>
+            </td>
+          </tr>
+        </slot>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script lang="ts">
@@ -49,6 +65,10 @@ export default defineComponent({
     formatData: {
       type: Object,
       required: false,
+    },
+    showRowNumber: {
+      type: Boolean,
+      default: true,
     },
   },
 

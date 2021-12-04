@@ -1,6 +1,7 @@
 // Grays
 $gray-200: #eceeef;
 $gray-600: #707070;
+$gray-800: #55595C;
 
 // Dark
 $dark: #373a3c;
@@ -18,3 +19,7 @@ $offcanvas-color: var(--bs-white);
 $nav-link-padding-x: 2rem;
 $nav-link-color: var(--bs-white);
 $nav-link-hover-color: var(--bs-white);
+
+// Tables
+$table-cell-vertical-align: center;
+$table-color: $gray-800;
