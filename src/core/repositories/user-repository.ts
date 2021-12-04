@@ -1,6 +1,6 @@
 import type { LoginDTO, RegisterDTO } from '@/core/dto/user-dto'
-import type { User } from '@/core/entities/user'
 import type { IUserRepository } from '@/core/use-cases/interfaces'
+import { User } from '@/core/entities/user'
 import { Api, IApiOptions } from '@/core/services'
 
 export class UserRepository implements IUserRepository {
@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
     const { data } = await this.api.send<{ user: User }>(options)
     Api.sharedToken = data.user.token as string
 
-    return data.user
+    return new User(data.user)
   }
 
   async register(user: RegisterDTO): Promise<User> {
@@ -33,7 +33,7 @@ export class UserRepository implements IUserRepository {
 
     const { data } = await this.api.send<{ user: User }>(options)
 
-    return data.user
+    return new User(data.user)
   }
 
   async currentUser(): Promise<User> {
@@ -45,6 +45,6 @@ export class UserRepository implements IUserRepository {
 
     const { data } = await this.api.send<{ user: User }>(options)
 
-    return data.user
+    return new User(data.user)
   }
 }

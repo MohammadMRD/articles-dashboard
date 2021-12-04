@@ -22,7 +22,7 @@ export class ArticleRepository implements IArticleRepository {
 
     const { data } = await this.api.send<{ articles: Article[] }>(options)
 
-    return data.articles
+    return data.articles.map((article) => new Article(article))
   }
 
   async get(query: IArticleQuery): Promise<Article> {
@@ -34,7 +34,7 @@ export class ArticleRepository implements IArticleRepository {
 
     const { data } = await this.api.send<{ article: Article }>(options)
 
-    return data.article
+    return new Article(data.article)
   }
 
   async create(createArticleDto: CreateArticleDTO): Promise<Article> {
@@ -47,7 +47,7 @@ export class ArticleRepository implements IArticleRepository {
 
     const { data } = await this.api.send<{ article: Article }>(options)
 
-    return data.article
+    return new Article(data.article)
   }
 
   async delete(query: IArticleQuery): Promise<void> {
@@ -73,6 +73,6 @@ export class ArticleRepository implements IArticleRepository {
 
     const { data } = await this.api.send<{ article: Article }>(options)
 
-    return data.article
+    return new Article(data.article)
   }
 }
