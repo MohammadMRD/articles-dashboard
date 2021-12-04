@@ -10,6 +10,6 @@ export interface IArticleRepository {
   list(page?: PageNumber): Promise<Article[]>
   get(query: IArticleQuery): Promise<Article>
   create(createArticleDto: CreateArticleDTO): Promise<Article>
-  delete(createArticleDto: IArticleQuery): Promise<void>
-  edit(editArticleDto: EditArticleDTO): Promise<Article>
+  delete(query: IArticleQuery): Promise<void>
+  edit(query: IArticleQuery, editArticleDto: EditArticleDTO): Promise<Article>
 }

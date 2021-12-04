@@ -46,7 +46,7 @@ export class DeleteArticleUseCase {
 export class EditArticleUseCase {
   constructor(private articleRepository: IArticleRepository) {}
 
-  execute(articleDto: EditArticleDTO): Promise<Article> {
-    return this.articleRepository.edit(articleDto)
+  execute(query: IArticleQuery, articleDto: EditArticleDTO): Promise<Article> {
+    return this.articleRepository.edit(query, articleDto)
   }
 }
