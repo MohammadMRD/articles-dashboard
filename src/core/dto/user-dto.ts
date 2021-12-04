@@ -9,11 +9,7 @@ export class LoginDTO {
 }
 
 export class RegisterDTO {
-  constructor(
-    public email: Email,
-    public password: Password,
-    public username: Username
-  ) {}
+  constructor(public email: Email, public password: Password, public username: Username) {}
 
   static fromUser(user: User): RegisterDTO {
     return new RegisterDTO(user.email, user.password || '', user.username)

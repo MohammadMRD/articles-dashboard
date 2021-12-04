@@ -1,15 +1,7 @@
 <template>
-  <div
-    v-bind="rootProps"
-    :class="{ 'form-check': ['radio', 'checkbox'].includes($attrs.type) }"
-  >
+  <div v-bind="rootProps" :class="{ 'form-check': ['radio', 'checkbox'].includes($attrs.type) }">
     <!-- Label -->
-    <label
-      class="form-label"
-      :class="{ 'text-danger': isInvalid }"
-      :for="$attrs.id"
-      v-bind="labelProps"
-    >
+    <label class="form-label" :class="{ 'text-danger': isInvalid }" :for="$attrs.id" v-bind="labelProps">
       {{ label }}
     </label>
 
@@ -77,9 +69,7 @@ export default defineComponent({
     }
 
     const type = attrs.type as InputTypesAttr
-    const inputTypeClass = computed(
-      () => inputTypeMapClasses[type ?? '_default']
-    )
+    const inputTypeClass = computed(() => inputTypeMapClasses[type ?? '_default'])
 
     return {
       inputTypeClass,

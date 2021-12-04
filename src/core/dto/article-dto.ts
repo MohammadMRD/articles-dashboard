@@ -1,10 +1,4 @@
-import {
-  Article,
-  Title,
-  Description,
-  ArticleBody,
-  TagList,
-} from '@/core/entities'
+import { Article, Title, Description, ArticleBody, TagList } from '@/core/entities'
 
 export class CreateArticleDTO {
   constructor(
@@ -15,12 +9,7 @@ export class CreateArticleDTO {
   ) {}
 
   static fromArticle(article: Article): CreateArticleDTO {
-    return new CreateArticleDTO(
-      article.title,
-      article.description,
-      article.body,
-      article.tagList
-    )
+    return new CreateArticleDTO(article.title, article.description, article.body, article.tagList)
   }
 }
 

@@ -49,14 +49,12 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'articles/create',
         name: 'create-article',
-        component: () =>
-          import('@/presentation/pages/dashboard/create-edit-article.vue'),
+        component: () => import('@/presentation/pages/dashboard/create-edit-article.vue'),
       },
       {
         path: 'articles/edit/:slug',
         name: 'edit-article',
-        component: () =>
-          import('@/presentation/pages/dashboard/create-edit-article.vue'),
+        component: () => import('@/presentation/pages/dashboard/create-edit-article.vue'),
       },
     ],
   },

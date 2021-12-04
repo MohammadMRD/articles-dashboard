@@ -20,7 +20,6 @@ export function registerComponents(app: App): void {
         ?.replace(/\.\w+$/, '') || ''
 
     // Register component globally
-    componentName &&
-      app.component(componentName, componentConfig.default || componentConfig)
+    componentName && app.component(componentName, componentConfig.default || componentConfig)
   }
 }

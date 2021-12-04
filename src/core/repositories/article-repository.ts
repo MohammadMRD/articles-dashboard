@@ -60,10 +60,7 @@ export class ArticleRepository implements IArticleRepository {
     await this.api.send<{ article: Article }>(options)
   }
 
-  async edit(
-    query: IArticleQuery,
-    editArticleDto: EditArticleDTO
-  ): Promise<Article> {
+  async edit(query: IArticleQuery, editArticleDto: EditArticleDTO): Promise<Article> {
     const options: IApiOptions = {
       method: 'POST',
       url: `/articles/${query.slug}`,
