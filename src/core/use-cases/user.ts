@@ -5,19 +5,23 @@ import type { IUserRepository } from '@/core/use-cases/interfaces/user-repositor
 export class LoginUseCase {
   constructor(private userRepository: IUserRepository) {}
 
-  async execute(loginDto: LoginDTO): Promise<User> {
-    const user = await this.userRepository.login(loginDto)
-
-    return user
+  execute(loginDto: LoginDTO): Promise<User> {
+    return this.userRepository.login(loginDto)
   }
 }
 
 export class RegisterUseCase {
   constructor(private userRepository: IUserRepository) {}
 
-  async execute(registerDto: RegisterDTO): Promise<User> {
-    const user = await this.userRepository.register(registerDto)
+  execute(registerDto: RegisterDTO): Promise<User> {
+    return this.userRepository.register(registerDto)
+  }
+}
 
-    return user
+export class GetCurrentUserUseCase {
+  constructor(private userRepository: IUserRepository) {}
+
+  execute(): Promise<User> {
+    return this.userRepository.currentUser()
   }
 }
