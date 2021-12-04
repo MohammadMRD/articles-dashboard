@@ -2,8 +2,9 @@ import type { MutationTree, ActionTree } from 'vuex'
 import { provideArticleUseCases, Article, CreateArticleDTO, EditArticleDTO } from '@/core'
 
 export type ArticleState = {
-  articles: Article | null
+  articles: Article[]
   currentPage: number
+  articlesCount: number
 }
 
 type EditArticleActionPayload = {
@@ -15,17 +16,18 @@ const { getAllArticlesUseCase, getArticleUseCase, createArticleUseCase, deleteAr
   provideArticleUseCases()
 
 // State
-const state = (): ArticleState => ({ articles: null, currentPage: 1 })
+const state = (): ArticleState => ({ articles: [], currentPage: 1, articlesCount: 0 })
 
 // Mutations
 export enum ArticleMutations {
   SET_ARTICLES = 'set-articles',
-  SET_CURRENT_PAGE = 'set-articles',
+  SET_CURRENT_PAGE = 'set-currentPage',
 }
 
 const mutations: MutationTree<ArticleState> = {
   [ArticleMutations.SET_ARTICLES](state, payload) {
-    state.articles = payload
+    state.articles = payload.articles
+    state.articlesCount = payload.articlesCount
   },
 
   [ArticleMutations.SET_CURRENT_PAGE](state, payload) {
@@ -37,10 +39,10 @@ const mutations: MutationTree<ArticleState> = {
 const actions: ActionTree<ArticleState, undefined> = {
   async getAllArticles({ commit, state }, page): Promise<void> {
     page = page ?? state.currentPage
-    const articles = await getAllArticlesUseCase.execute(page)
+    const { articles, articlesCount } = await getAllArticlesUseCase.execute(page)
 
     commit(ArticleMutations.SET_CURRENT_PAGE, page)
-    commit(ArticleMutations.SET_ARTICLES, articles)
+    commit(ArticleMutations.SET_ARTICLES, { articles, articlesCount })
   },
 
   getArticle(_, slug: string): Promise<Article> {

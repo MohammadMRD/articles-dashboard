@@ -11,18 +11,18 @@ export class ArticleRepository implements IArticleRepository {
     this.api = new Api({ baseURL: this.baseUrl })
   }
 
-  async list(page = 1): Promise<Article[]> {
+  async list(page = 1): Promise<{ articlesCount: number; articles: Article[] }> {
     const shouldSendPageNumber = page > 1
 
     const options: IApiOptions = {
       method: 'GET',
-      url: '/articles' + shouldSendPageNumber ? `/page/${page}` : '',
+      url: '/articles' + (shouldSendPageNumber ? `/page/${page}` : ''),
       withAuth: true,
     }
 
-    const { data } = await this.api.send<{ articles: Article[] }>(options)
+    const { data } = await this.api.send<{ articlesCount: number; articles: Article[] }>(options)
 
-    return data.articles.map((article) => new Article(article))
+    return { articlesCount: data.articlesCount, articles: data.articles.map((article) => new Article(article)) }
   }
 
   async get(query: IArticleQuery): Promise<Article> {
