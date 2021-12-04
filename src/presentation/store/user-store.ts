@@ -6,14 +6,14 @@ export type UserState = { user: User | null }
 const { loginUseCase, registerUseCase, getCurrentUserUseCase } = provideUserUseCases()
 
 // State
-const state = (): { user: User | null } => ({ user: null })
+const state = (): UserState => ({ user: null })
 
 // Mutations
 export enum UserMutations {
   SET_USER = 'set-user',
 }
 
-const mutations: MutationTree<{ user: User }> = {
+const mutations: MutationTree<UserState> = {
   [UserMutations.SET_USER](state, payload) {
     state.user = payload
   },
