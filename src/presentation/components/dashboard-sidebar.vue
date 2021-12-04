@@ -58,7 +58,7 @@ export default defineComponent({
     const items = [
       createItem('Posts', 'title'),
       createItem('All Articles', 'link', 'articles'),
-      // createItem('New Article', 'link', 'new-article'),
+      createItem('New Article', 'link', 'create-article'),
     ]
 
     return {
