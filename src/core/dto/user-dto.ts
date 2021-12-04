@@ -3,9 +3,8 @@ import type { Email, Password, User, Username } from '@/core/entities/user'
 export class LoginDTO {
   constructor(public email: Email, public password: Password) {}
 
-  fromUser(user: User): void {
-    this.email = user.email
-    this.password = user.password || ''
+  static fromUser(user: User): LoginDTO {
+    return new LoginDTO(user.email, user.password || '')
   }
 }
 
@@ -16,9 +15,7 @@ export class RegisterDTO {
     public username: Username
   ) {}
 
-  fromUser(user: User): void {
-    this.email = user.email
-    this.password = user.password || ''
-    this.username = user.username
+  static fromUser(user: User): RegisterDTO {
+    return new RegisterDTO(user.email, user.password || '', user.username)
   }
 }
