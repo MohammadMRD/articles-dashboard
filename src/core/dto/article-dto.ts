@@ -23,3 +23,5 @@ export class CreateArticleDTO {
     )
   }
 }
+
+export class EditArticleDTO extends CreateArticleDTO {}
