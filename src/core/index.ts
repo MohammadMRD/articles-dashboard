@@ -1,6 +1,9 @@
 import { UserRepository, ArticleRepository, TagRepository } from '@/core/repositories'
 import { UserUseCases, ArticleUseCases, TagUseCases } from '@/core/use-cases'
 
+export * from './entities'
+export * from './dto'
+
 type ProvideUserUseCases = {
   getCurrentUserUseCase: UserUseCases.GetCurrentUserUseCase
   loginUseCase: UserUseCases.LoginUseCase
