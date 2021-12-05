@@ -24,7 +24,7 @@
         </ad-input>
 
         <!-- Submit -->
-        <ad-button variant="primary" class="mt-4" @click.prevent="createArticle()"> Submit </ad-button>
+        <ad-button variant="primary" class="mt-4" @click.prevent="createOrEditArticle()"> Submit </ad-button>
       </form>
 
       <!-- Create Tag -->
@@ -60,8 +60,8 @@
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { CreateArticleDTO } from '@/core'
+import { useRouter, useRoute } from 'vue-router'
+import { Article, CreateArticleDTO, TagList } from '@/core'
 
 type SelectedTags = { [key: string]: boolean }
 
@@ -72,12 +72,15 @@ export default defineComponent({
     // Manage tags
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
+    const isCreateMode = route.name !== 'edit-article'
     const newTag = ref('')
     const selectedTags = reactive<SelectedTags>({})
-    const tagsData = ref([...store.state.tagModule.tags])
+    const tagsData = ref<TagList>([])
 
     onMounted(async () => {
       await store.dispatch('tagModule/getAllTags')
+      tagsData.value = [...store.state.tagModule.tags].sort()
     })
 
     function createTag() {
@@ -96,11 +99,20 @@ export default defineComponent({
     }
 
     // Manage article
-    const articleDTO = reactive(new CreateArticleDTO('', '', '', []))
+    const articleDTO = ref(new CreateArticleDTO('', '', '', []))
 
-    async function createArticle() {
-      articleDTO.tagList = Object.keys(selectedTags)
-      await store.dispatch('articleModule/createArticle', articleDTO)
+    onMounted(async () => {
+      if (isCreateMode) return
+
+      const article: Article = await store.dispatch('articleModule/getArticle', route.params.slug)
+      articleDTO.value = article
+      article.tagList.forEach((tag) => toggleTag(tag))
+    })
+
+    async function createOrEditArticle() {
+      articleDTO.value.tagList = Object.keys(selectedTags)
+      const data = isCreateMode ? articleDTO.value : { articleDTO: articleDTO.value, slug: route.params.slug }
+      await store.dispatch(`articleModule/${isCreateMode ? 'createArticle' : 'editArticle'}`, data)
       router.push({ name: 'articles' })
     }
 
@@ -112,7 +124,7 @@ export default defineComponent({
       toggleTag,
 
       articleDTO,
-      createArticle,
+      createOrEditArticle,
     }
   },
 })
