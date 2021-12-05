@@ -14,7 +14,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import DashboardHeader from '@/presentation/components/dashboard-header.vue'
 import DashboardSidebar from '@/presentation/components/dashboard-sidebar.vue'
 
@@ -24,6 +25,16 @@ export default defineComponent({
   components: {
     DashboardHeader,
     DashboardSidebar,
+  },
+
+  setup() {
+    const store = useStore()
+
+    onMounted(() => {
+      if (store.state.userModule.user === null) {
+        store.dispatch('userModule/getCurrentUser')
+      }
+    })
   },
 })
 </script>
