@@ -1,5 +1,6 @@
 import type { MutationTree, ActionTree } from 'vuex'
 import { provideUserUseCases, User, LoginDTO, RegisterDTO } from '@/core'
+import router from '../router'
 
 export type UserState = { user: User | null }
 
@@ -34,6 +35,12 @@ const actions: ActionTree<UserState, undefined> = {
   async getCurrentUser({ commit }) {
     const user = await getCurrentUserUseCase.execute()
     commit(UserMutations.SET_USER, user)
+  },
+
+  async logout({ commit }) {
+    localStorage.removeItem('token')
+    await router.push({ name: 'login' })
+    commit(UserMutations.SET_USER, null)
   },
 }
 
