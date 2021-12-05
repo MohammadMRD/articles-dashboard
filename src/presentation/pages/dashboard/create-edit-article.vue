@@ -9,18 +9,19 @@
           id="article-title"
           label="Title"
           placeholder="Title"
-          v-model="article.title"
+          v-model="articleDTO.title"
           :rootProps="{ class: 'mt-3' }"
         ></ad-input>
         <ad-input
           id="article-description"
           label="Description"
           placeholder="Description"
-          v-model="article.description"
+          v-model="articleDTO.description"
           :rootProps="{ class: 'mt-3' }"
         >
         </ad-input>
-        <ad-input label="Body" is="textarea" rows="8" v-model="article.body" :rootProps="{ class: 'mt-3' }"> </ad-input>
+        <ad-input label="Body" is="textarea" rows="8" v-model="articleDTO.body" :rootProps="{ class: 'mt-3' }">
+        </ad-input>
 
         <!-- Submit -->
         <ad-button variant="primary" class="mt-4" @click.prevent="createArticle()"> Submit </ad-button>
@@ -58,23 +59,29 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { CreateArticleDTO } from '@/core'
+
+type SelectedTags = { [key: string]: boolean }
 
 export default defineComponent({
   name: 'create-edit-article',
 
   setup() {
     // Manage tags
-    const tagsData = ref<string[]>([])
+    const store = useStore()
+    const router = useRouter()
     const newTag = ref('')
-    const selectedTags = reactive<{ [key: string]: boolean }>({})
+    const selectedTags = reactive<SelectedTags>({})
+    const tagsData = ref([...store.state.tagModule.tags])
 
     onMounted(async () => {
-      const res = await fetch('https://api.realworld.io/api/tags').then((res) => res.json())
-      tagsData.value = res.tags
+      await store.dispatch('tagModule/getAllTags')
     })
 
     function createTag() {
-      if (!newTag.value) return
+      if (!newTag.value || tagsData.value.includes(newTag.value)) return
 
       tagsData.value.push(newTag.value)
       selectedTags[newTag.value] = true
@@ -89,18 +96,12 @@ export default defineComponent({
     }
 
     // Manage article
-    const article = reactive({ title: '', description: '', body: '' })
+    const articleDTO = reactive(new CreateArticleDTO('', '', '', []))
 
-    function createArticle() {
-      fetch('https://api.realworld.io/api/articles', {
-        method: 'POST',
-        body: JSON.stringify({
-          article: {
-            ...article,
-            tagList: tagsData.value,
-          },
-        }),
-      })
+    async function createArticle() {
+      articleDTO.tagList = Object.keys(selectedTags)
+      await store.dispatch('articleModule/createArticle', articleDTO)
+      router.push({ name: 'articles' })
     }
 
     return {
@@ -110,7 +111,7 @@ export default defineComponent({
       createTag,
       toggleTag,
 
-      article,
+      articleDTO,
       createArticle,
     }
   },

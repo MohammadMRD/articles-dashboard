@@ -55,7 +55,11 @@ const actions: ActionTree<ArticleState, undefined> = {
 
   async deleteArticle({ dispatch }, slug: string): Promise<void> {
     await deleteArticleUseCase.execute({ slug })
-    await dispatch('getAllArticles')
+
+    // API needs a delay to update data and then we can fetch new data
+    setTimeout(async () => {
+      await dispatch('getAllArticles')
+    }, 1000)
   },
 
   async editArticle({ dispatch }, { slug, articleDTO }: EditArticleActionPayload): Promise<void> {

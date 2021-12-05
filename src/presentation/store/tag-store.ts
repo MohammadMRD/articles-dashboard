@@ -2,13 +2,13 @@ import type { MutationTree, ActionTree } from 'vuex'
 import { provideTagUseCases, TagList } from '@/core'
 
 export type TagState = {
-  tags: TagList | null
+  tags: TagList
 }
 
 const { getAllTagsUseCase } = provideTagUseCases()
 
 // State
-const state = (): TagState => ({ tags: null })
+const state = (): TagState => ({ tags: [] })
 
 // Mutations
 export enum TagMutations {

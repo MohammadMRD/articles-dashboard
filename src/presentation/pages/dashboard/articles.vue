@@ -60,7 +60,7 @@ export default defineComponent({
     })
 
     onMounted(async () => {
-      await store.dispatch('articleModule/getAllArticles')
+      await store.dispatch('articleModule/getAllArticles', 1)
       new Dropdown(dropDown.value as unknown as Element)
     })
 
