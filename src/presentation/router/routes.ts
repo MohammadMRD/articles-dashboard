@@ -39,6 +39,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('@/presentation/pages/_default.vue'),
     meta: {
       layout: DashboardLayout,
+      auth: true,
     },
     children: [
       {

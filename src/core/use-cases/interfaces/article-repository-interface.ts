@@ -7,7 +7,7 @@ export interface IArticleQuery {
 }
 
 export interface IArticleRepository {
-  list(page?: PageNumber): Promise<Article[]>
+  list(page?: PageNumber): Promise<{ articlesCount: number; articles: Article[] }>
   get(query: IArticleQuery): Promise<Article>
   create(createArticleDto: CreateArticleDTO): Promise<Article>
   delete(query: IArticleQuery): Promise<void>

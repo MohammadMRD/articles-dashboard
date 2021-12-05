@@ -19,7 +19,7 @@ export class UserRepository implements IUserRepository {
     }
 
     const { data } = await this.api.send<{ user: User }>(options)
-    Api.sharedToken = data.user.token as string
+    Api.setSharedToken(data.user.token as string)
 
     return new User(data.user)
   }

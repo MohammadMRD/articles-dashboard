@@ -39,6 +39,14 @@ export class Api {
     return { data, headers, status }
   }
 
+  public static setSharedToken(token: string): void {
+    Api.sharedToken = token
+
+    // FIXME: Create a service to persist data
+    // Token shouldn't be store in local storage
+    localStorage.setItem('token', token)
+  }
+
   send<R = unknown>(options: IApiOptions | string): Promise<IApiResponse<R>> {
     if (typeof options === 'string') options = { url: options, method: 'GET' }
 
@@ -51,7 +59,7 @@ export class Api {
 
     if (withAuth) {
       apiOptions.headers = apiOptions.headers ?? {}
-      apiOptions.headers.Authorization = `Token ${token || Api.sharedToken}`
+      apiOptions.headers.Authorization = `Token ${token || Api.sharedToken || localStorage.getItem('token')}`
     }
 
     // TODO: Normalize Errors with assertion service

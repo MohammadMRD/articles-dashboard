@@ -5,7 +5,7 @@ import { CreateArticleDTO, EditArticleDTO } from '@/core/dto'
 export class GetAllArticlesUseCase {
   constructor(private articleRepository: IArticleRepository) {}
 
-  execute(pageNumber?: PageNumber): Promise<Article[]> {
+  execute(pageNumber?: PageNumber): Promise<{ articlesCount: number; articles: Article[] }> {
     return this.articleRepository.list(pageNumber)
   }
 }
@@ -29,7 +29,10 @@ export class CreateArticleUseCase {
 export class DeleteArticleUseCase {
   constructor(private articleRepository: IArticleRepository) {}
 
-  execute(query: IArticleQuery, pageNumber?: PageNumber): Promise<Article[]> | undefined {
+  execute(
+    query: IArticleQuery,
+    pageNumber?: PageNumber
+  ): Promise<{ articlesCount: number; articles: Article[] }> | undefined {
     this.articleRepository.delete(query)
 
     return pageNumber ? this.articleRepository.list(pageNumber) : undefined
