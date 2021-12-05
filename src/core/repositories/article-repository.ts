@@ -52,7 +52,7 @@ export class ArticleRepository implements IArticleRepository {
 
   async delete(query: IArticleQuery): Promise<void> {
     const options: IApiOptions = {
-      method: 'POST',
+      method: 'DELETE',
       url: `/articles/${query.slug}`,
       withAuth: true,
     }
@@ -62,7 +62,7 @@ export class ArticleRepository implements IArticleRepository {
 
   async edit(query: IArticleQuery, editArticleDto: EditArticleDTO): Promise<Article> {
     const options: IApiOptions = {
-      method: 'POST',
+      method: 'PUT',
       url: `/articles/${query.slug}`,
       withAuth: true,
       data: { article: editArticleDto },

@@ -9,28 +9,40 @@
       :pagination="articleState.pagination"
       @change-page="handleChangePage"
     >
+      <!-- Actions -->
       <template #actions="{ item }">
         <div ref="dropDown" class="dropdown">
           <ad-button variant="primary" data-bs-toggle="dropdown">...</ad-button>
           <ul class="dropdown-menu">
+            <!-- Edit -->
             <li>
               <router-link class="dropdown-item" :to="{ name: 'edit-article', params: { slug: item.slug } }">
                 Edit
               </router-link>
             </li>
-            <li><span class="dropdown-item text-danger">Delete</span></li>
+
+            <!-- Delete -->
+            <li><span class="dropdown-item text-danger" @click="handleShowModal(item)">Delete</span></li>
           </ul>
         </div>
       </template>
     </ad-table>
+    <ad-modal :show="deleteArticleInfo.show" title="Delete Article">
+      Are you sure to delete Article? <i>{{ deleteArticleInfo.title }}</i>
+
+      <template #actions>
+        <ad-button variant="secondary" outline @click="handleCloseModal">No</ad-button>
+        <ad-button variant="danger" @click="handleDeleteArticle">Yes</ad-button>
+      </template>
+    </ad-modal>
   </ad-page>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import { useStore } from 'vuex'
 import { Dropdown } from 'bootstrap'
-import { ArticleBody, Author, TagList } from '@/core'
+import { Article, ArticleBody, Author, TagList } from '@/core'
 import { ArticleState } from '@/presentation/store/article-store'
 import adButton from '@/presentation/components/ad-button.vue'
 
@@ -80,7 +92,40 @@ export default defineComponent({
       await store.dispatch('articleModule/getAllArticles', page)
     }
 
-    return { articleState, tableHeaders, tableUniqueColumn, formatData, handleChangePage, dropDown }
+    // Handle Delete modal
+    const deleteArticleInfo = reactive({ show: false, slug: '', title: '' })
+
+    function handleShowModal(article: Article) {
+      console.log()
+
+      deleteArticleInfo.slug = article.slug || ''
+      deleteArticleInfo.title = article.title
+      deleteArticleInfo.show = true
+    }
+
+    function handleCloseModal() {
+      deleteArticleInfo.slug = ''
+      deleteArticleInfo.title = ''
+      deleteArticleInfo.show = false
+    }
+
+    async function handleDeleteArticle() {
+      await store.dispatch('articleModule/deleteArticle', deleteArticleInfo.slug)
+      handleCloseModal()
+    }
+
+    return {
+      articleState,
+      tableHeaders,
+      tableUniqueColumn,
+      formatData,
+      handleChangePage,
+      dropDown,
+      deleteArticleInfo,
+      handleShowModal,
+      handleCloseModal,
+      handleDeleteArticle,
+    }
   },
 })
 </script>
