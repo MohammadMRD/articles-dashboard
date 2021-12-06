@@ -1,13 +1,12 @@
 import { RouteRecordRaw } from 'vue-router'
-import Home from '@/presentation/pages/Home.vue'
 import AuthLayout from '@/presentation/layouts/auth-layout.vue'
 import DashboardLayout from '@/presentation/layouts/dashboard-layout.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
+    redirect: { name: 'articles' },
+    component: () => import('@/presentation/pages/_default.vue'),
   },
 
   // Auth pages
