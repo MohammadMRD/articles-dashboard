@@ -33,7 +33,7 @@
           id="tag-name"
           label="Tags"
           placeholder="New tag"
-          v-model="newTag"
+          v-model="tags.new"
           @keyup.enter="createTag()"
           :rootProps="{ class: 'mt-3' }"
         >
@@ -44,10 +44,10 @@
           <ad-input
             id="tag"
             type="checkbox"
-            v-for="tag of tagsData"
+            v-for="tag of tags.list"
             :key="tag"
             :label="tag"
-            :checked="selectedTags[tag]"
+            :checked="tags.selected[tag]"
             @change="toggleTag(tag)"
           >
           </ad-input>
@@ -58,68 +58,75 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { Article, CreateArticleDTO, TagList } from '@/core'
 
 type SelectedTags = { [key: string]: boolean }
+type TagsState = { new: string; selected: SelectedTags; list: TagList }
 
 export default defineComponent({
   name: 'create-edit-article',
 
   setup() {
-    // Manage tags
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    const isCreateMode = route.name !== 'edit-article'
-    const newTag = ref('')
-    const selectedTags = reactive<SelectedTags>({})
-    const tagsData = ref<TagList>([])
+    const DEFAULT_TAGS_STATE = { new: '', selected: {}, list: [] }
+    // TODO: Add a tag manager class for handle tag's state better
+    const tags = reactive<TagsState>({ ...DEFAULT_TAGS_STATE })
+    const articleDTO = ref(new CreateArticleDTO('', '', '', []))
+    const isCreateMode = computed(() => route.name === 'create-article')
 
-    onMounted(async () => {
+    watch(isCreateMode, initializePage)
+    onMounted(initializePage)
+
+    async function initializePage() {
       await store.dispatch('tagModule/getAllTags')
-      tagsData.value = [...store.state.tagModule.tags].sort()
-    })
 
+      if (!isCreateMode.value) {
+        const article: Article = await store.dispatch('articleModule/getArticle', route.params.slug)
+        articleDTO.value = article
+        article.tagList.forEach((tag) => toggleTag(tag))
+      } else {
+        articleDTO.value = new CreateArticleDTO('', '', '', [])
+        tags.new = ''
+        tags.selected = {}
+      }
+
+      tags.list = [...new Set([...store.state.tagModule.tags, ...articleDTO.value.tagList])].sort()
+    }
+
+    // Manage tags
     function createTag() {
-      if (!newTag.value || tagsData.value.includes(newTag.value)) return
+      if (!tags.new || tags.list.includes(tags.new)) return
 
-      tagsData.value.push(newTag.value)
-      selectedTags[newTag.value] = true
+      tags.list.push(tags.new)
+      tags.selected[tags.new] = true
       // TODO: Change with insertion sort and use localCompare
-      tagsData.value.sort()
-      newTag.value = ''
+      tags.list.sort()
+      tags.new = ''
     }
 
     function toggleTag(tag: string) {
-      if (selectedTags[tag]) delete selectedTags[tag]
-      else selectedTags[tag] = true
+      if (tags.selected[tag]) delete tags.selected[tag]
+      else tags.selected[tag] = true
     }
 
     // Manage article
-    const articleDTO = ref(new CreateArticleDTO('', '', '', []))
-
-    onMounted(async () => {
-      if (isCreateMode) return
-
-      const article: Article = await store.dispatch('articleModule/getArticle', route.params.slug)
-      articleDTO.value = article
-      article.tagList.forEach((tag) => toggleTag(tag))
-    })
-
     async function createOrEditArticle() {
-      articleDTO.value.tagList = Object.keys(selectedTags)
-      const data = isCreateMode ? articleDTO.value : { articleDTO: articleDTO.value, slug: route.params.slug }
-      await store.dispatch(`articleModule/${isCreateMode ? 'createArticle' : 'editArticle'}`, data)
+      articleDTO.value.tagList = Object.keys(tags.selected)
+      const [actionName, slug] = isCreateMode.value ? ['createArticle'] : ['editArticle', route.params.slug]
+      const data = { articleDTO: articleDTO.value, slug }
+
+      await store.dispatch(`articleModule/${actionName}`, data)
+
       router.push({ name: 'articles' })
     }
 
     return {
-      tagsData,
-      newTag,
-      selectedTags,
+      tags,
       createTag,
       toggleTag,
 

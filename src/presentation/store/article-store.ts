@@ -7,6 +7,10 @@ export type ArticleState = {
   articlesCount: number
 }
 
+type CreateArticleActionPayload = {
+  articleDTO: CreateArticleDTO
+}
+
 type EditArticleActionPayload = {
   slug: string
   articleDTO: EditArticleDTO
@@ -49,7 +53,7 @@ const actions: ActionTree<ArticleState, undefined> = {
     return getArticleUseCase.execute({ slug })
   },
 
-  createArticle(_, articleDTO: CreateArticleDTO): Promise<Article> {
+  createArticle(_, { articleDTO }: CreateArticleActionPayload): Promise<Article> {
     return createArticleUseCase.execute(articleDTO)
   },
 
