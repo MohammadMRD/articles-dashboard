@@ -5,7 +5,7 @@ import {
   emailSchema,
   FormSchema,
   validateForm,
-} from '@/core/validation'
+} from '@/core/services/validation'
 import type { Email, Password, User, Username } from '@/core/entities/user'
 
 export type LoginErrors = {

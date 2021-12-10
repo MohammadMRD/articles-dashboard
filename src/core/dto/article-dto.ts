@@ -7,7 +7,7 @@ import {
   tagsSchema,
   FormSchema,
   validateForm,
-} from '@/core/validation'
+} from '@/core/services/validation'
 
 type ArticleErrors = {
   title?: string
