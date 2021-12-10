@@ -4,8 +4,23 @@
     <template #header>Login</template>
 
     <!-- Form -->
-    <ad-input v-model="loginDTO.email" id="login-email" label="Email" type="email" />
-    <ad-input v-model="loginDTO.password" id="login-password" label="Password" type="password" />
+    <ad-input
+      v-model.trim="loginDTO.email"
+      :isInvalid="!!loginDTO.errors.email"
+      :errorMessage="loginDTO.errors.email"
+      id="login-email"
+      label="Email"
+      type="email"
+    />
+    <ad-input
+      v-model.trim="loginDTO.password"
+      :isInvalid="!!loginDTO.errors.password"
+      :errorMessage="loginDTO.errors.password"
+      :rootProps="{ class: 'mt-3' }"
+      id="login-password"
+      label="Password"
+      type="password"
+    />
     <ad-button variant="primary" class="mt-3" type="submit" @click.prevent="handleLogin"> Login </ad-button>
 
     <!-- Footer -->
@@ -31,7 +46,10 @@ export default defineComponent({
     const loginDTO = reactive(new LoginDTO('', ''))
 
     async function handleLogin() {
-      // TODO: Add validation
+      const isValid = await loginDTO.validate()
+
+      if (!isValid) return
+
       await store.dispatch('userModule/login', loginDTO)
 
       // TODO: Define enum for routes' name
