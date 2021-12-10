@@ -9,7 +9,9 @@
           id="article-title"
           label="Title"
           placeholder="Title"
-          v-model="articleDTO.title"
+          v-model.trim="articleDTO.title"
+          :isInvalid="!!articleDTO.errors.title"
+          :errorMessage="articleDTO.errors.title"
           :rootProps="{ class: 'mt-3' }"
         ></ad-input>
         <ad-input
@@ -17,10 +19,20 @@
           label="Description"
           placeholder="Description"
           v-model="articleDTO.description"
+          :isInvalid="!!articleDTO.errors.description"
+          :errorMessage="articleDTO.errors.description"
           :rootProps="{ class: 'mt-3' }"
         >
         </ad-input>
-        <ad-input label="Body" is="textarea" rows="8" v-model="articleDTO.body" :rootProps="{ class: 'mt-3' }">
+        <ad-input
+          label="Body"
+          is="textarea"
+          rows="8"
+          v-model="articleDTO.body"
+          :isInvalid="!!articleDTO.errors.body"
+          :errorMessage="articleDTO.errors.body"
+          :rootProps="{ class: 'mt-3' }"
+        >
         </ad-input>
 
         <!-- Submit -->
@@ -61,7 +73,7 @@
 import { computed, defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
-import { Article, CreateArticleDTO, TagList } from '@/core'
+import { Article, CreateArticleDTO, EditArticleDTO, TagList } from '@/core'
 
 type SelectedTags = { [key: string]: boolean }
 type TagsState = { new: string; selected: SelectedTags; list: TagList }
@@ -87,7 +99,7 @@ export default defineComponent({
 
       if (!isCreateMode.value) {
         const article: Article = await store.dispatch('articleModule/getArticle', route.params.slug)
-        articleDTO.value = article
+        articleDTO.value = EditArticleDTO.fromArticle(article)
         article.tagList.forEach((tag) => toggleTag(tag))
       } else {
         articleDTO.value = new CreateArticleDTO('', '', '', [])
@@ -117,6 +129,10 @@ export default defineComponent({
     // Manage article
     async function createOrEditArticle() {
       articleDTO.value.tagList = Object.keys(tags.selected)
+      const isValid = await articleDTO.value.validate()
+
+      if (!isValid) return
+
       const [actionName, slug] = isCreateMode.value ? ['createArticle'] : ['editArticle', route.params.slug]
       const data = { articleDTO: articleDTO.value, slug }
 
