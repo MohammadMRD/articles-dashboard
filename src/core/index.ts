@@ -3,6 +3,7 @@ import { UserUseCases, ArticleUseCases, TagUseCases } from '@/core/use-cases'
 
 export * from './entities'
 export * from './dto'
+export * from './validation'
 
 type ProvideUserUseCases = {
   getCurrentUserUseCase: UserUseCases.GetCurrentUserUseCase

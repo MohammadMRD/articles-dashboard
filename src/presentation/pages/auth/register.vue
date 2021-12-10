@@ -4,9 +4,32 @@
     <template #header>Register</template>
 
     <!-- Form -->
-    <ad-input v-model="registerDTO.username" id="register-user" label="User" type="text" />
-    <ad-input v-model="registerDTO.email" id="register-email" label="Email" type="email" />
-    <ad-input v-model="registerDTO.password" id="register-password" label="Password" type="password" />
+    <ad-input
+      v-model.trim="registerDTO.username"
+      :isInvalid="!!registerDTO.errors.username"
+      :errorMessage="registerDTO.errors.username"
+      id="register-user"
+      label="User"
+      type="text"
+    />
+    <ad-input
+      v-model.trim="registerDTO.email"
+      :isInvalid="!!registerDTO.errors.email"
+      :errorMessage="registerDTO.errors.email"
+      :rootProps="{ class: 'mt-3' }"
+      id="register-email"
+      label="Email"
+      type="email"
+    />
+    <ad-input
+      v-model.trim="registerDTO.password"
+      :isInvalid="!!registerDTO.errors.password"
+      :errorMessage="registerDTO.errors.password"
+      :rootProps="{ class: 'mt-3' }"
+      id="register-password"
+      label="Password"
+      type="password"
+    />
     <ad-button variant="primary" class="mt-3" type="submit" @click.prevent="handleRegister"> Register </ad-button>
 
     <!-- Footer -->
@@ -32,7 +55,10 @@ export default defineComponent({
     const registerDTO = reactive(new RegisterDTO('', '', ''))
 
     async function handleRegister() {
-      // TODO: Add validation
+      const isValid = await registerDTO.validate()
+
+      if (!isValid) return
+
       await store.dispatch('userModule/register', registerDTO)
 
       // TODO: Define enum for routes' name
